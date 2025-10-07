@@ -1,8 +1,10 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from 'path'
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
+  // Load .env from parent directory (httpdocs/)
+  const env = loadEnv(mode, path.resolve(process.cwd(), '..'), '')
 
   return {
     plugins: [

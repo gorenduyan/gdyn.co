@@ -5,8 +5,8 @@ Gören Duyan link shortener ve landing page.
 ## Proje Yapısı
 
 ```
-/var/www/vhosts/gdyn.co/httpdocs/  (Git root & Web root)
-├── package.json          (Ana dizinde - Plesk için)
+httpdocs/                 (Git root & Web root)
+├── package.json          (Ana dizinde)
 ├── .env.example
 ├── .gitignore
 ├── index.html           (Build çıktısı)
@@ -45,14 +45,18 @@ npm run build
 2. SSH ile bağlanın:
 
 ```bash
-cd /var/www/vhosts/gdyn.co/httpdocs/projects
+cd /path/to/your/httpdocs
 cp .env.example .env
-nano .env  # Düzenleyin
+nano .env  # Düzenleyin (.env ana dizinde kalmalı)
+
+cd projects
 npm ci
 npm run build
 ```
 
-3. Document root zaten `httpdocs` - değiştirmeyin
+3. Document root'u `httpdocs` olarak ayarlayın
+
+**Önemli:** `.env` dosyası ana dizinde olmalı, `projects/` içinde DEĞİL!
 
 ## Deployment
 
@@ -67,7 +71,7 @@ GitHub Actions otomatik olarak her push'ta:
 `.env` dosyasını oluşturmak için:
 
 ```bash
-cd projects
+# Ana dizinde oluşturun (projects/ içinde DEĞİL)
 cp .env.example .env
 ```
 
@@ -87,7 +91,7 @@ Deployment için gerekli secrets:
 - `SERVER_USER`: SSH kullanıcı adı
 - `SERVER_PASSWORD`: SSH şifresi
 - `SERVER_PORT`: SSH portu (varsayılan: 22)
-- `PROJECT_PATH`: httpdocs dizini (örn: `/var/www/vhosts/gdyn.co/httpdocs`)
+- `PROJECT_PATH`: httpdocs dizini (örn: `/path/to/httpdocs`)
 - `WEBHOOK_URL`: Plesk Git webhook URL'i
 
 ## Plesk Ayarları
