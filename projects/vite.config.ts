@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => {
       }
     ],
     publicDir: 'public',
+    envDir: '../',  // Load .env from parent directory
     build: {
       outDir: '../',
       emptyOutDir: false,
