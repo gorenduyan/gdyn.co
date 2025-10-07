@@ -11,6 +11,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+project
 
 # Editor directories and files
 .vscode/*
@@ -32,6 +33,19 @@ dist-ssr
 
 # Build output
 *.local
+
+# Build output in root (from projects/)
+/index.html
+/assets/
+/.htaccess
+/android-icon-*.png
+/apple-icon-*.png
+/ms-icon-*.png
+/favicon*.png
+/favicon.ico
+/browserconfig.xml
+/manifest.json
+/images/
 
 # OS files
 Thumbs.db

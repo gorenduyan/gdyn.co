@@ -37,5 +37,9 @@ export default defineConfig(({ mode }) => {
       }
     ],
     publicDir: 'public',
+    build: {
+      outDir: '../',
+      emptyOutDir: false,
+    }
   }
 })

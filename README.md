@@ -1,164 +1,101 @@
-# Mobile App Download Page
+# gdyn.co
 
-A modern, customizable download page for mobile applications built with Vue 3, TypeScript, and Tailwind CSS. Features automatic platform detection and smart redirects to the appropriate app store.
+Gören Duyan link shortener ve landing page.
 
-## Features
+## Proje Yapısı
 
--  **Smart Platform Detection** - Automatically detects Android/iOS devices
--  **Dark Mode** - System-based dark/light theme switching
--  **Responsive Design** - Mobile-first, works on all screen sizes
--  **Fast & Lightweight** - Built with Vite for optimal performance
--  **Fully Customizable** - Configure everything via environment variables
--  **Auto Redirect** - Redirects users to recommended platform with animated progress bar
--  **SEO Optimized** - Meta tags for social media previews
-
-##  Tech Stack
-
-- **Vue 3** - Progressive JavaScript framework
-- **TypeScript** - Type-safe development
-- **Vite** - Next generation frontend tooling
-- **Tailwind CSS** - Utility-first CSS framework
-- **Vue Router** - Official router for Vue.js
-
-##  Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/gdyn.co.git
-cd gdyn.co
+```
+/var/www/vhosts/gdyn.co/httpdocs/  (Git root & Web root)
+├── package.json          (Ana dizinde - Plesk için)
+├── .env.example
+├── .gitignore
+├── index.html           (Build çıktısı)
+├── assets/              (Build çıktısı)
+├── .htaccess            (Build çıktısı)
+└── projects/            (Vue kaynak kodu)
+    ├── src/
+    ├── public/
+    ├── .env             (Git'e push edilmez)
+    ├── package.json
+    ├── vite.config.ts
+    └── ...
 ```
 
-2. Install dependencies:
+## Kurulum
+
+### Local Development
+
 ```bash
+cd projects
 npm install
-```
-
-3. Create environment file:
-```bash
-cp .env.example .env
-```
-
-4. Edit `.env` file with your app information:
-```env
-VITE_APP_NAME="Your App Name"
-VITE_APP_DESCRIPTION="Your app description"
-VITE_GOOGLE_PLAY_URL="https://play.google.com/store/apps/details?id=your.app.id"
-VITE_APP_STORE_URL="https://apps.apple.com/app/your-app/id123456"
-# ... see .env.example for all options
-```
-
-## Development
-
-Start the development server:
-```bash
 npm run dev
 ```
 
-Visit `http://localhost:5173/indir` to see your download page.
+### Production Build
 
-## Build
-
-Build for production:
 ```bash
+cd projects
+npm run build
+# Build çıktısı ana dizine (../) oluşturulur
+```
+
+## Sunucu Kurulumu
+
+1. Plesk'te repository'yi `httpdocs` dizinine çekin
+2. SSH ile bağlanın:
+
+```bash
+cd /var/www/vhosts/gdyn.co/httpdocs/projects
+cp .env.example .env
+nano .env  # Düzenleyin
+npm ci
 npm run build
 ```
 
-The built files will be in the `dist/` directory.
-
-## Project Structure
-
-```
-├── src/
-│   ├── views/
-│   │   ├── Download.vue    # Main download page with platform detection
-│   │   └── NotFound.vue    # 404 redirect page
-│   ├── App.vue             # Root component with dark mode logic
-│   └── main.ts             # Application entry point
-├── public/
-│   ├── images/             # Static images
-│   └── favicon files       # App icons for all platforms
-├── .env.example            # Environment variables template
-└── .github/
-    └── workflows/
-        └── deploy.yml      # Automated deployment workflow
-```
-
-## Customization
-
-### Environment Variables
-
-All customization is done through environment variables in `.env`:
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `VITE_APP_NAME` | Your application name | "My App" |
-| `VITE_APP_DESCRIPTION` | App description for meta tags | "Download our amazing app" |
-| `VITE_APP_URL` | Your domain | "https://example.com" |
-| `VITE_GOOGLE_PLAY_URL` | Google Play Store link | Full Play Store URL |
-| `VITE_APP_STORE_URL` | Apple App Store link | Full App Store URL |
-| `VITE_WEBSITE_URL` | Your main website | "https://www.example.com" |
-| `VITE_PRIMARY_COLOR` | Brand primary color | "#2773ce" |
-| `VITE_LOGO_LIGHT` | Logo for light mode | URL to logo image |
-| `VITE_LOGO_DARK` | Logo for dark mode | URL to logo image |
-
-See `.env.example` for the complete list.
-
-### Routes
-
-- `/indir` - Download page with platform detection
-- All other routes - Redirect to `VITE_REDIRECT_URL`
+3. Document root zaten `httpdocs` - değiştirmeyin
 
 ## Deployment
 
-### Manual Deployment
+GitHub Actions otomatik olarak her push'ta:
+1. Plesk webhook ile `git pull` tetiklenir
+2. SSH ile sunucuya bağlanır
+3. `projects/` dizinde `npm ci && npm run build` çalıştırır
+4. Build çıktısı ana dizine oluşturulur
 
-1. Build the project:
+## Environment Variables
+
+`.env` dosyasını oluşturmak için:
+
 ```bash
-npm run build
+cd projects
+cp .env.example .env
 ```
 
-2. Upload the `dist/` folder to your web server.
+Gerekli değişkenler:
+- `VITE_GA_ID`: Google Analytics ID (GitHub'da görünmez)
+- `VITE_APP_NAME`: Uygulama adı
+- `VITE_APP_URL`: Site URL'i
+- `VITE_APP_TITLE`: SEO başlığı
+- `VITE_APP_DESCRIPTION`: SEO açıklaması
+- `VITE_OG_IMAGE`: Open Graph resmi
+- Diğerleri için `.env.example` dosyasına bakın
 
-3. Configure your web server to serve the SPA correctly:
+## GitHub Secrets
 
-**Nginx:**
-```nginx
-location / {
-    try_files $uri $uri/ /index.html;
-}
-```
+Deployment için gerekli secrets:
+- `SERVER_HOST`: Sunucu IP/hostname
+- `SERVER_USER`: SSH kullanıcı adı
+- `SERVER_PASSWORD`: SSH şifresi
+- `SERVER_PORT`: SSH portu (varsayılan: 22)
+- `PROJECT_PATH`: httpdocs dizini (örn: `/var/www/vhosts/gdyn.co/httpdocs`)
+- `WEBHOOK_URL`: Plesk Git webhook URL'i
 
-**Apache (.htaccess):**
-```apache
-RewriteEngine On
-RewriteBase /
-RewriteRule ^index\.html$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
-```
+## Plesk Ayarları
 
-### Automated Deployment with GitHub Actions
+1. **Git**: Repository'yi `httpdocs` dizinine bağlayın
+2. **Document Root**: `httpdocs` (varsayılan)
+3. **Node.js**: Gerekirse enable edin
 
-This project includes a GitHub Actions workflow for automated deployment.
+## Lisans
 
-1. Add the following secrets to your GitHub repository:
-   - `SERVER_HOST` - Your server IP/domain
-   - `SERVER_USER` - SSH username
-   - `SERVER_PASSWORD` - SSH password
-   - `PROJECT_PATH` - Project directory on server
-   - `WEBHOOK_URL` - Your git webhook URL (optional)
-
-2. Push to the `main` branch to trigger automatic deployment.
-
-## License
-
-MIT License - feel free to use this project for your own applications.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Support
-
-If you have any questions or need help, please open an issue on GitHub.
+Apache License 2.0

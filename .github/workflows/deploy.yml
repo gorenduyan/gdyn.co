@@ -25,11 +25,11 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            npm install
-            npm run build
-            rm -rf assets images *.html *.png *.ico *.xml *.json
-            cp -r dist/* .
+            cd ${{ secrets.PROJECT_PATH }} && \
+            git pull origin main && \
+            cd projects && \
+            npm ci && \
+            npm run build && \
             echo "Deployment completed at $(date)"
 
       - name: Deploy notification
