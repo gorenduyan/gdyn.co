@@ -283,7 +283,7 @@ onMounted(() => {
       <a
         :href="whatsappChannelUrl"
         target="_blank"
-        class="group block bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500"
+        class="group mt-2 block bg-white dark:bg-gray-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center">
